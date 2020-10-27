@@ -118,12 +118,12 @@ def run_episode(e, env,logs=True):
       print(f"Episode {e} finished with score {score}")
       scores.append(score)
       if e%10==0 and logs: # Logs saved in TrainingStats folder
-        filename = "TrainingStats/scores4k.pkl"
+        filename = "TrainingStats/scores.pkl"
         pickle.dump(scores,open(filename,"wb"))
       if score > best_score:
         best_score = score
         if e > 50: # Sometimes we don't want the weights generated at the beginning
-          torch.save(model, 'SavedWeights/dqtrain_limit4k/'+str(save_checkpoint)+'dqn_'+str(e)+'.pt')
+          torch.save(model, 'SavedWeights/'+str(save_checkpoint)+'dqn_'+str(e)+'.pt')
           save_checkpoint += 1
       break
 
@@ -165,7 +165,7 @@ for episode in range(episodes):
   run_episode(episode, env)
 
 print('Complete')
-pickle.dump(scores, open("TrainingStats/scores4k.pkl","wb"))
+pickle.dump(scores, open("TrainingStats/scores.pkl","wb"))
 
 plt.plot([i+1 for i in range(episodes)],scores)
 plt.show()
