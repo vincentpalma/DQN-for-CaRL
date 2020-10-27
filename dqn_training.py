@@ -146,10 +146,10 @@ def learn():
   current_q_values = model(batch_state).gather(1, batch_action)
   # Expected Q values are estimated from actions which gives maximum Q value
   max_next_q_values = model(batch_next_state).detach().max(1)[0]
-  expected_q_values = batch_reward + (GAMMA * max_next_q_values) #calculating y_j
+  target_q_values = batch_reward + (GAMMA * max_next_q_values) #calculating y_j
 
-  # Loss is measured from error between current and newly expected Q values
-  loss = F.smooth_l1_loss(current_q_values.reshape_as(expected_q_values), expected_q_values)
+  # Loss is measured from error between current and target Q values y_j
+  loss = F.smooth_l1_loss(current_q_values.reshape_as(target_q_values), target_q_values)
 
   # Backpropagation of loss to NN
   optimizer.zero_grad()
