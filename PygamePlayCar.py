@@ -94,7 +94,7 @@ BATCH_SIZE = 64     # Batch size
 class DQN(nn.Module):
   def __init__(self):
     nn.Module.__init__(self)
-    self.l1 = nn.Linear(55, HIDDEN_LAYER)    # input is img vector of 55 dimensions
+    self.l1 = nn.Linear(59, HIDDEN_LAYER)    # input is img vector of 55 dimensions
     self.l2 = nn.Linear(HIDDEN_LAYER, HIDDEN_LAYER)
     self.l3 = nn.Linear(HIDDEN_LAYER,len(AVAILABLE_ACTIONS))       
 
@@ -187,6 +187,8 @@ class CarGame:
         self.ai_old = 0
         self.time_penelization = 0.2
         self.past_actions = np.zeros([2, 2])  # np.zeros([10,2])
+        self.last_actions = np.zeros(4) # for the DQN
+        self.last_action = np.zeros(2)
         self.selfdriving_SAC = False
         self.selfdriving_DQN = False
         self.flag_check_underground = True
@@ -459,8 +461,10 @@ class CarGame:
                 action = mSAC.get_action(self.action_space)
                 flag_average = 1
             if self.selfdriving_DQN is True:
-                action = mDQN(torch.FloatTensor([self.action_space[:55]])).data.max(1)[1].view(1, 1)
+                action = mDQN(torch.FloatTensor([np.append(self.action_space[:55],self.last_actions)])).data.max(1)[1].view(1, 1)
                 action = AVAILABLE_ACTIONS[action.numpy()[0, 0]]
+                self.last_actions = np.append(self.last_action,action)
+                self.last_action = action
             else:
                 action = np.array([ai, di])
 
