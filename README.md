@@ -1,6 +1,8 @@
 # DQN-for-CaRL
 ## Requirements
-requirements are pytorch and tensorflow:
+requirements are pygame, pytorch (for the DQN) and tensorflow (for the CAE):
+``pip install pygame``
+
 - https://pytorch.org/get-started/locally/
 
 ``pip install tensorflow``
