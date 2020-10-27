@@ -5,6 +5,10 @@ requirements are pytorch and tensorflow:
 
 ``pip install tensorflow``
 
+## Testing the agent
+``python PlayingManually.py``
+
+hit x to activate autopilot et c to deactivate
 ## Performance
 when trained over 600 episodes:
 
