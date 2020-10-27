@@ -1,4 +1,8 @@
 # DQN-for-CaRL
+## Requirements
+requirements are pytorch and tensorflow:
+- https://pytorch.org/get-started/locally/
+``pip install tensorflow``
 
 ## Performance
 when trained over 600 episodes:
