@@ -29,7 +29,7 @@ BATCH_SIZE = 64     # Batch size
 class DQN(nn.Module):
   def __init__(self):
     nn.Module.__init__(self)
-    self.l1 = nn.Linear(59, HIDDEN_LAYER)    # input is vector of 59 dims (flatted img + 2 last actions)
+    self.l1 = nn.Linear(59, HIDDEN_LAYER)    # input is vector of 59 dims (flatted img vector of size 55 + 2 last actions)
     self.l2 = nn.Linear(HIDDEN_LAYER, HIDDEN_LAYER)
     self.l3 = nn.Linear(HIDDEN_LAYER,len(AVAILABLE_ACTIONS))       
 
