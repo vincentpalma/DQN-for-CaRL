@@ -9,9 +9,9 @@ requirements are pygame, pytorch (for the DQN) and tensorflow (for the CAE):
 ``pip install tensorflow``
 
 ## Testing the agent
-``python PlayingManually.py``
+``python play.py``
 
-hit x to activate autopilot et c to deactivate
+Hit ``x`` to activate autopilot et ``c`` to deactivate.
 ## Performance
 when trained over 600 episodes:
 
