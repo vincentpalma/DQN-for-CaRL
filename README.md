@@ -11,7 +11,8 @@ requirements are pygame, pytorch (for the DQN) and tensorflow (for the CAE):
 ## Testing the agent
 ``python play.py``
 
-Hit ``x`` to activate autopilot et ``c`` to deactivate.
+Hit ``x`` to activate autopilot et ``c`` to deactivate it. 
+Hit ``t`` to get a screenshot of the agent's view.
 ## Performance
 when trained over 600 episodes:
 
