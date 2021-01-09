@@ -1,12 +1,10 @@
 # DQN-for-CaRL
 ## Requirements
-requirements are pygame, pytorch (for the DQN) and tensorflow (for the CAE):
+The requirements are pygame and pytorch:
 
 ``pip install pygame``
 
 - https://pytorch.org/get-started/locally/
-
-``pip install tensorflow``
 
 ## Testing the agent
 ``python play.py``
@@ -14,15 +12,14 @@ requirements are pygame, pytorch (for the DQN) and tensorflow (for the CAE):
 Hit ``x`` to activate autopilot et ``c`` to deactivate it. 
 Hit ``t`` to get a screenshot of the agent's view.
 ## Performance
-when trained over 600 episodes:
+when trained over 1000 episodes:
 
-![Training Performance](https://i.imgur.com/HUysRrE.png)
+![Training Performance](https://i.imgur.com/8gXmBNz.png)
 
 video:
 
 https://www.youtube.com/watch?v=vL1klvbBcHU
 
 ## Credits
-environment and autoencoder from: https://github.com/MatthiasSchinzel/SAC-for-CaRL
-
+Environment & inspiration from: https://github.com/MatthiasSchinzel/SAC-for-CaRL
 DQN paper: https://arxiv.org/pdf/1312.5602.pdf
