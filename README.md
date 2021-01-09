@@ -18,12 +18,14 @@ Input image             |  Output image
 :-------------------------:|:-------------------------:
 ![](https://i.imgur.com/0rNKaD1.png)  |  ![](https://i.imgur.com/QT2DJLh.png)
 
+![Structure](https://i.imgur.com/MNvN6GA.png)
+
 ## Performance
-when trained over 1000 episodes:
+When trained over 1000 episodes:
 
 ![Training Performance](https://i.imgur.com/8gXmBNz.png)
 
-video:
+Video:
 
 https://www.youtube.com/watch?v=vL1klvbBcHU
 
