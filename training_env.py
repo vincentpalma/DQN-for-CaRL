@@ -2,9 +2,13 @@ import numpy as np
 import pygame
 import cv2
 import pathlib
+import torch
+import torchvision.transforms as T
+from PIL import Image
+import matplotlib.pyplot as plt
 
-from AutoencoderProperties import Encoder # modified version of carl (thats why its called carrl)
-enc = Encoder()
+from autoencoder import VAE # modified version of carl for training purposes
+enc = torch.load("./SavedWeights/last_VAE.pt", map_location="cpu")
 
 class State:
     """
@@ -420,7 +424,14 @@ class carl:
         self.past_actions = np.roll(self.past_actions, 1)
         self.past_actions[0, 0] = action[0]
         self.past_actions[0, 1] = action[1]
-        return enc.Encode_img(self.front_view), self.current_reward, self.done, 0 # return vec of size 55
+
+        trans = T.ToTensor()
+        input_img = np.rot90(self.front_view)[::-1] #rot 90 degrees
+        input_img[:,:] = abs(255-input_img)         #inverse color values
+        autoencoded_img ,_,_,encoded = enc(trans(input_img).unsqueeze(0))
+        # trf = T.ToPILImage(mode="L")
+        # plt.imshow(trf(autoencoded_img.squeeze())); plt.show()
+        return encoded.data.cpu().numpy(), self.current_reward, self.done, 0 # return vec of size 55
 
     def render(self):
         return self.front_view

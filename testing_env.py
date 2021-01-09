@@ -3,15 +3,18 @@
 import torch
 from torch.distributions import Normal
 import torch.nn.functional as F
+import torchvision.transforms as T
 import torch.nn as nn
-from AutoencoderProperties import Encoder
+from autoencoder import VAE
 import numpy as np
 import sys
+from PIL import Image
 
 import pygame
 import cv2
 
 import matplotlib.pyplot as plt
+
 
 class State:
     """
@@ -44,7 +47,7 @@ BATCH_SIZE = 64     # Batch size
 class DQN(nn.Module):
   def __init__(self):
     nn.Module.__init__(self)
-    self.l1 = nn.Linear(59, HIDDEN_LAYER)    # input is img vector of 55 dimensions
+    self.l1 = nn.Linear(36, HIDDEN_LAYER)    # input is img vector of 32 dimensions
     self.l2 = nn.Linear(HIDDEN_LAYER, HIDDEN_LAYER)
     self.l3 = nn.Linear(HIDDEN_LAYER,len(AVAILABLE_ACTIONS))       
 
@@ -130,7 +133,7 @@ class CarGame:
         self.yaw_old = self.di
         self.outline = []
         self.front_view = []
-        self.enc = Encoder()
+        self.enc = torch.load("./SavedWeights/last_VAE.pt", map_location="cpu")
         self.current_reward = 0
         self.ai_old = 0
         self.time_penelization = 0.2
@@ -387,10 +390,22 @@ class CarGame:
             if status[pygame.K_q]:
                 self.done = True
             if status[pygame.K_t]: # shows what the agent "sees"
-                plt.imshow(np.rot90(self.front_view)[::-1],cmap="gray")
-                plt.show()
-                plt.imshow(np.rot90(self.enc.Autoencode(self.front_view)[::-1],3),cmap="gray")
-                print(self.enc.Encode_img(self.front_view))
+                trans = T.ToTensor()
+                input_img = np.rot90(self.front_view)[::-1] #rot 90 degrees
+                #input_img[:,:] = abs(255-input_img)         #inverse color values
+                
+                autoencoded_img,_,_,bottleneck = self.enc(trans(input_img).unsqueeze(0))
+                trf = T.ToPILImage(mode="L")
+                cosmetic = np.array(trf(autoencoded_img.squeeze()))
+                cosmetic[:,:] = abs(255-cosmetic) 
+
+                input_img[:,:] = abs(255-input_img) 
+                print(cosmetic.astype(np.uint8), input_img)
+                Image.fromarray(input_img).save("input.png","PNG")
+                Image.fromarray(cosmetic).save("output.png","PNG")
+                plt.imshow(input_img,cmap="gray"); plt.show()
+                plt.imshow(cosmetic.astype(np.uint8),cmap="gray")
+                print(bottleneck)
                 plt.show()
             if status[pygame.K_x]:
                 self.selfdriving_DQN = True
@@ -432,7 +447,11 @@ class CarGame:
             w = pygame.surfarray.make_surface(w)
             if self.flag_showBackend is True:
                 self.screen_orignal.blit(w, (0, 0))
-        self.action_space = self.enc.Encode_img_not_flatted(self.front_view)
+        trans = T.ToTensor()
+        input_img = np.rot90(self.front_view)[::-1] #rot 90 degrees
+        input_img[:,:] = abs(255-input_img)         #inverse color values
+        _,_,_,bottleneck = self.enc(trans(input_img).unsqueeze(0))
+        self.action_space = bottleneck.data.cpu().numpy()
         return self.action_space, self.current_reward, self.done, 0
 
     def render(self):

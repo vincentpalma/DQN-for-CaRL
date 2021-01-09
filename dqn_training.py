@@ -1,4 +1,3 @@
-import gym
 import random
 import math
 import torch
@@ -10,7 +9,9 @@ import matplotlib.pyplot as plt
 import pickle
 import numpy as np
 
+from autoencoder import VAE
 import training_env
+
 
 # Env parameters
 
@@ -29,7 +30,7 @@ BATCH_SIZE = 64     # Batch size
 class DQN(nn.Module):
   def __init__(self):
     nn.Module.__init__(self)
-    self.l1 = nn.Linear(59, HIDDEN_LAYER)    # input is vector of 59 dims (flatted img + 2 last actions)
+    self.l1 = nn.Linear(36, HIDDEN_LAYER)    # input is vector of 36 dims (bottleneck + 2 last actions)
     self.l2 = nn.Linear(HIDDEN_LAYER, HIDDEN_LAYER)
     self.l3 = nn.Linear(HIDDEN_LAYER,len(AVAILABLE_ACTIONS))       
 
@@ -109,7 +110,7 @@ def run_episode(e, env,logs=True):
     score += reward
     global best_score      
     global save_checkpoint
-    global model      # I know it's ugly..
+    global model      
 
     step += 1
     if step >= 4000:
@@ -158,7 +159,7 @@ def learn():
 
 ### Training
 
-episodes = 800
+episodes = 500
 env = training_env.carl()
 
 for episode in range(episodes):
